@@ -4,7 +4,7 @@
 정답을 고르면 골이 들어가고, 오답을 고르면 골키퍼가 막습니다. 한 판은 10문제이고, 한 문제에 20초가 주어집니다.
 
 - **바로 플레이:** https://leekkyuho.github.io/math-penalty-kick/
-- **설치 없음:** `index.html` 파일 하나로 실행되며 인터넷 연결이 필요 없습니다.
+- **설치 없음:** 브라우저만 있으면 됩니다. `오프라인용/math-penalty.html` 파일 하나만 있으면 인터넷 없이도 실행됩니다.
 - **개인정보 없음:** 이름이나 기록을 저장하지 않습니다. 소리 켬/끔 설정만 브라우저에 남습니다.
 
 | 시작 화면 | 문제 풀이 |
@@ -20,12 +20,14 @@
 | 방법 | 이렇게 하세요 | 이럴 때 좋아요 |
 |---|---|---|
 | 웹에서 바로 | 위 **바로 플레이** 주소를 엽니다 | 학생들에게 주소나 QR 코드를 나눠 줄 때 |
-| 파일로 실행 | `index.html`을 내려받아 더블클릭합니다 | 교실 인터넷이 불안정할 때, USB로 옮길 때 |
+| 파일 하나로 실행 | [`오프라인용/math-penalty.html`](오프라인용/math-penalty.html)을 내려받아 더블클릭합니다 | 교실 인터넷이 불안정할 때, USB·메신저로 나눠 줄 때 |
+| 폴더째 실행 | 초록색 **Code** 버튼 → **Download ZIP**으로 받아 압축을 풀고 `index.html`을 더블클릭합니다 | 코드를 보거나 고치고 싶을 때 |
 
 - Chrome, Edge, Whale, Safari 최신 버전에서 동작합니다.
 - 전자칠판, 노트북, 태블릿, 휴대폰 화면에 맞춰 자동으로 배치됩니다. 가로 화면을 권장합니다.
 - 전자칠판에서는 `F11`을 눌러 전체 화면으로 쓰면 가장 좋습니다.
-- 파일 하나만 내려받으려면 이 페이지 위쪽의 `index.html`을 누른 뒤 오른쪽 위 **Download raw file(⬇)** 버튼을 누르세요.
+- 오프라인용 파일은 위 링크를 누른 뒤 오른쪽 위 **Download raw file(⬇)** 버튼으로 받으세요. 그림, 디자인, 게임 동작이 모두 이 파일 하나에 들어 있습니다.
+- 폴더째 받은 경우에는 `index.html`만 따로 옮기면 그림이 나오지 않습니다. `css`, `js`, `assets` 폴더와 함께 두세요.
 
 ## 2. 게임 방법
 
@@ -56,7 +58,7 @@
 | | | 나머지 없는 나눗셈 | `56 ÷ 8 = ?` |
 | | | 소수 한 자리 수의 덧셈·뺄셈 | `3.7 + 4.6 = ?`, `8.2 − 2.5 = ?` |
 
-문제 범위를 바꾸려면 `src/template.html`의 `LEVELS` 부분을 고친 뒤 다시 빌드하세요. 아래 **5. 수정하는 방법**을 참고하세요.
+문제 범위를 바꾸려면 `js/game.js`의 `LEVELS` 부분을 고치세요. 아래 **5. 수정하는 방법**을 참고하세요.
 
 ## 4. 화면 구성과 기능
 
@@ -72,48 +74,60 @@
 
 ## 5. 수정하는 방법
 
-게임은 `src/` 폴더의 원본을 합쳐 `index.html` 한 파일로 만듭니다. 이미지는 파일 안에 base64로 들어갑니다.
+| 바꾸고 싶은 것 | 고칠 파일 | 고칠 곳 |
+|---|---|---|
+| 문제 범위·유형 | `js/game.js` | `const LEVELS = { mid: …, high: … }` |
+| 문제 수, 제한 시간 | `js/game.js` | `const TOTAL = 10, TIME_LIMIT = 20;` |
+| 결과 화면 칭찬 문구 | `js/game.js` | `function showResult()` |
+| 시작 화면 안내 문구 | `index.html` | `<div class="overlay" id="intro">` |
+| 색, 글자 크기, 버튼 모양 | `css/style.css` | |
+| 배경, 골키퍼, 공 그림 | `assets/images/` | 같은 이름, 같은 크기의 파일로 덮어쓰기 |
+
+고친 뒤에는 오프라인용 파일도 다시 만들어 주세요. Windows PowerShell에서 저장소 폴더를 열고 아래 명령을 실행하면 됩니다.
 
 ```powershell
-# 저장소 폴더에서 실행 (Windows PowerShell)
-powershell -ExecutionPolicy Bypass -File src\build.ps1
+powershell -ExecutionPolicy Bypass -File tools\build.ps1
 ```
 
-| 바꾸고 싶은 것 | 고칠 곳 (`src/template.html`) |
-|---|---|
-| 문제 범위·유형 | `const LEVELS = { mid: …, high: … }` |
-| 문제 수, 제한 시간 | `const TOTAL = 10, TIME_LIMIT = 20;` |
-| 결과 화면 칭찬 문구 | `function showResult()` |
-| 시작 화면 안내 문구 | `<div class="overlay" id="intro">` |
+이 명령은 `index.html`, `css`, `js`, `assets`를 합쳐 `오프라인용/math-penalty.html`을 새로 만듭니다.
+관중석 좌석 마스크(`assets/images/seat-masks/`)를 바꾼 경우에는 `js/seat-masks.js`도 함께 다시 만듭니다.
 
 ## 6. 폴더 구조
 
 ```
 math-penalty-kick/
-├── index.html              # 완성된 게임 (이 파일 하나로 실행, GitHub Pages 시작 페이지)
-├── README.md
+├── index.html              # 게임 화면 (GitHub Pages 시작 페이지)
+├── css/
+│   └── style.css           # 디자인 (배치, 색, 버튼, 애니메이션)
+├── js/
+│   ├── game.js             # 게임 동작 (문제, 타이머, 슛, 골키퍼, 관중, 소리)
+│   └── seat-masks.js       # 관중석 좌석 마스크 (tools/build.ps1이 자동 생성)
+├── assets/
+│   └── images/
+│       ├── bg.jpg          # 경기장 배경
+│       ├── k_body.png      # 골키퍼 몸통
+│       ├── k_armL.png      # 골키퍼 왼팔 (펀칭 동작용)
+│       ├── k_armR.png      # 골키퍼 오른팔 (펀칭 동작용)
+│       ├── ball.png        # 축구공
+│       └── seat-masks/     # 관중이 앉을 자리 (left, right, center)
+├── 오프라인용/
+│   └── math-penalty.html   # 파일 하나로 된 버전 (USB·메신저 공유용)
 ├── docs/
 │   └── screenshots/        # README에 쓰인 화면 캡처
-└── src/
-    ├── template.html       # 게임 원본 (HTML·CSS·JavaScript)
-    ├── build.ps1           # template.html + assets → index.html
-    ├── assets/
-    │   ├── bg.jpg          # 경기장 배경
-    │   ├── keeper.png      # 골키퍼 (전체)
-    │   ├── k_body.png      # 골키퍼 몸통 (펀칭 동작용)
-    │   ├── k_armL.png      # 골키퍼 왼팔
-    │   ├── k_armR.png      # 골키퍼 오른팔
-    │   ├── ball.png        # 축구공
-    │   └── m_L/m_R/m_C.png # 관중석 좌석 마스크 (관중이 그려질 자리)
-    └── tools/              # 원본 그림에서 위 이미지를 잘라 낸 도구 (C#, PowerShell)
-        ├── run.ps1         # 배경·골키퍼·공 생성
-        ├── Proc.cs         # 배경 정리 (글자·숫자 지우기, 원근 흐림, 구름)
-        ├── Rig.cs          # 골키퍼 몸통·팔 분리
-        └── Crowd.cs        # 관중석 좌석 마스크 생성
+├── tools/
+│   ├── build.ps1           # 오프라인용 파일과 seat-masks.js 만들기
+│   └── art/                # 원본 그림에서 게임 이미지를 잘라 낸 도구 (C#, PowerShell)
+│       ├── run.ps1         # 배경·공 생성
+│       ├── Proc.cs         # 배경 정리 (글자·숫자 지우기, 원근 흐림, 구름)
+│       ├── Rig.cs          # 골키퍼 몸통·팔 분리
+│       └── Crowd.cs        # 관중석 좌석 마스크 생성
+└── README.md
 ```
 
-`src/tools`는 원본 그림(`orig.png`)이 있어야 실행됩니다. 원본 그림은 저장소에 포함하지 않았고, 가공이 끝난 이미지만 `src/assets`에 들어 있습니다.
-게임을 고치거나 실행하는 데에는 `src/tools`가 필요 없습니다.
+소리 폴더는 없습니다. 효과음과 음악은 모두 `js/game.js`가 브라우저에서 직접 만들어 냅니다.
+
+`tools/art`는 원본 그림(`orig.png`)이 있어야 실행됩니다. 원본 그림은 저장소에 넣지 않았고, 가공이 끝난 이미지만 `assets/images`에 들어 있습니다.
+게임을 실행하거나 고치는 데에는 `tools/art`가 필요 없습니다.
 
 ## 7. 문제 해결
 
@@ -122,7 +136,8 @@ math-penalty-kick/
 | 소리가 나지 않아요 | 왼쪽 위 스피커 버튼이 켜져 있는지, 기기 음량이 켜져 있는지 확인하세요. 브라우저 정책 때문에 화면을 한 번 누른 뒤부터 소리가 납니다. |
 | 화면이 잘려 보여요 | 브라우저 창을 가로로 넓히거나 `F11` 전체 화면을 쓰세요. 휴대폰은 가로로 돌리면 더 크게 보입니다. |
 | 오래된 태블릿에서 끊겨요 | 기기 설정에서 '동작 줄이기'를 켜면 관중 움직임이 줄어 가벼워집니다. |
-| 내려받은 파일이 글자로만 보여요 | `index.html`을 메모장이 아닌 브라우저(Chrome, Edge)로 여세요. |
+| 내려받은 파일이 글자로만 보여요 | 파일을 메모장이 아닌 브라우저(Chrome, Edge)로 여세요. |
+| 배경과 골키퍼가 안 보여요 | `index.html`만 따로 옮긴 경우입니다. 폴더 전체를 함께 옮기거나 `오프라인용/math-penalty.html`을 쓰세요. |
 
 ## 8. 만든 사람과 출처
 
