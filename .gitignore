@@ -1,0 +1,7 @@
+# 원본 그림과 작업 중 생긴 파일은 올리지 않음
+orig.png
+bg_full.png
+*.tmp
+Thumbs.db
+desktop.ini
+.DS_Store
